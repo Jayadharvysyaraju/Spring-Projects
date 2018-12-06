@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+               
+ <!-- scope singleton is default , if we want scope to be prototype or others mention below.-->
+	<bean id="studentbean" class="com.myproject.Student" scope ="singleton">
+		<property name="name" value="jayadhar V"></property>
+		<constructor-arg value="2052"></constructor-arg>
+	</bean>
+
+	<bean id="employeebean" class="com.myproject.Employee">
+		<property name="name" value="jayadhar Vysyaraju"></property>
+		<constructor-arg index="0" type="int" value="2052"></constructor-arg>
+		<constructor-arg index="1" type="java.lang.String" value="epam"></constructor-arg>
+	</bean>
+ <!-- if we want to add default init and destroy method to all beans add below respective method to default-int-method and default-destroy-method attributes
+     at parent bean level -->
+	<bean id="nonemployeebean" class="com.myproject.NonEmployee" name ="nonemployeebean-name" init-method = "myInit" destroy-method = "myDestroy">
+		<property name="A1" ref="addressbean1"></property>
+		
+		<property name="A2">
+			<bean class="com.myproject.Address">
+				<property name="city" value="Chennai"></property>
+				<property name="state" value="Tamilnadu"></property>
+			</bean>
+		</property>
+		
+		<property name="A3" ref="addressbean3"></property>
+		<property name="A4" ref="addressbean4"></property>
+		
+		<property name="addresses">
+			<list>
+				<ref bean="addressbean1"/>
+				<ref bean="addressbean3"/>
+			</list>
+		</property>
+		
+		<!-- for map collection with string <map>  
+			<entry key="Java is a Programming Language"  value="Ajay Kumar"></entry>  
+			<entry key="Java is a Platform" value="John Smith"></entry>  
+			<entry key="Java is an Island" value="Raj Kumar"></entry>  
+		</map>  --> 
+		
+		<!-- non strings <map>  
+			<entry key-ref="answer1" value-ref="user1"></entry>  
+			<entry key-ref="answer2" value-ref="user2"></entry>  
+		</map> -->
+	</bean>
+
+	<bean id="addressbean1" class="com.myproject.Address">
+		<property name="city" value="Hyderabad"></property>
+		<property name="state" value="Telangana"></property>
+	</bean>
+	
+	<bean id="addressbean3" class="com.myproject.Address">
+		<property name="city" value="Banglore"></property>
+		<property name="state" value="Karnataka"></property>
+	</bean>
+	
+	<bean id="addressbean4" class="com.myproject.Address">
+		<qualifier value="NonEmpRelated"></qualifier>
+		<property name="city" value="Bhuvaneswar"></property>
+		<property name="state" value="orissa"></property>
+	</bean>
+	
+	<!-- <bean id="addressbean4" class="com.myproject.Address">
+		<property name="city" value="${addressbean4.city}"></property>
+		<property name="state" value="${addressbean4.state}"></property>
+	</bean> -->
+
+	<alias name = "nonemployeebean" alias ="nonemployeebean-alias"/>
+	
+	<bean class="com.myproject.DisplayNameBeanPostProcessor"/>
+	
+	<bean class="com.myproject.MyBeanFactoryPostProcessor"/>
+	
+	<!-- if we dont want to hardcode values in xml file , create a properties file and add values in it-->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name ="locations" value="address.properties"/>
+	</bean>
+
+	<!-- Instead of adding all bean post processors here.. simply use context annotation-config like below
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+	
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> -->
+	
+	<context:annotation-config/>
+	
+	<context:component-scan base-package="com.myproject"></context:component-scan>
+	
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>address</value>
+			</list>
+		</property>
+	</bean> -->
+</beans> 
