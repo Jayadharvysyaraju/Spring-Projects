@@ -16,7 +16,7 @@ public class Consumer implements Runnable {
 			synchronized(sharedQueue) {
 				while (sharedQueue.isEmpty()) {
 					try {
-						System.out.println("Consumer is waiting to produce objects by Produder..");
+						System.out.println("Consumer is waiting to produce objects by Producer..");
 						sharedQueue.wait();
 					} catch (InterruptedException e) {
 						e.printStackTrace();

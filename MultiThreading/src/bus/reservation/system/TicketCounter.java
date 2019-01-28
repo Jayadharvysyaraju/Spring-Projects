@@ -2,7 +2,7 @@ package bus.reservation.system;
 
 public class TicketCounter {
 
-	private int availableSeats = 3;
+	private int availableSeats = 20;
 
 	public synchronized void bookTicket(String pname, int numberOfSeats) {
 		if ((availableSeats >= numberOfSeats) && (numberOfSeats > 0)) {
